@@ -6,12 +6,12 @@ import { getCurrentConfig } from '../config/hmacConfig';
 const API_BASE_URL = getCurrentConfig().BASE_URL;
 
 // Helper function to create headers with HMAC Authentication
-const createHeaders = (httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH', contentType?: string): HeadersInit => {
+const createHeaders = async (httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH', contentType?: string): Promise<HeadersInit> => {
   // Log authentication details for debugging
-  logAuthDetails(httpMethod);
+  await logAuthDetails(httpMethod);
   
   // Get HMAC authentication headers
-  const authHeaders = getHeaders(httpMethod, contentType);
+  const authHeaders = await getHeaders(httpMethod, contentType);
   
   return authHeaders;
 };
@@ -20,7 +20,7 @@ const createHeaders = (httpMethod: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH', 
 export const apiGet = async (endpoint: string): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method: 'GET',
-    headers: createHeaders('GET')
+    headers: await createHeaders('GET')
   });
   
   if (!response.ok) {
@@ -36,7 +36,7 @@ export const apiPost = async (endpoint: string, data: any, contentType: string =
   
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method: 'POST',
-    headers: createHeaders('POST', contentType),
+    headers: await createHeaders('POST', contentType),
     body
   });
   
@@ -64,7 +64,7 @@ export const apiPut = async (endpoint: string, data: any, contentType: string = 
   
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method: 'PUT',
-    headers: createHeaders('PUT', contentType),
+    headers: await createHeaders('PUT', contentType),
     body
   });
   
@@ -79,7 +79,7 @@ export const apiPut = async (endpoint: string, data: any, contentType: string = 
 export const apiPatch = async (endpoint: string, data: any): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method: 'PATCH',
-    headers: createHeaders('PATCH', 'application/json'),
+    headers: await createHeaders('PATCH', 'application/json'),
     body: JSON.stringify(data)
   });
   
@@ -94,7 +94,7 @@ export const apiPatch = async (endpoint: string, data: any): Promise<any> => {
 export const apiDelete = async (endpoint: string): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method: 'DELETE',
-    headers: createHeaders('DELETE')
+    headers: await createHeaders('DELETE')
   });
   
   if (!response.ok) {
@@ -108,7 +108,7 @@ export const apiDelete = async (endpoint: string): Promise<any> => {
 export const apiPostFormData = async (endpoint: string, formData: FormData): Promise<Response> => {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method: 'POST',
-    headers: createHeaders('POST', 'multipart/form-data'),
+    headers: await createHeaders('POST', 'multipart/form-data'),
     body: formData
   });
   
@@ -120,7 +120,7 @@ export const apiPostFormData = async (endpoint: string, formData: FormData): Pro
 export const apiPutFormData = async (endpoint: string, formData: FormData): Promise<Response> => {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method: 'PUT',
-    headers: createHeaders('PUT', 'multipart/form-data'),
+    headers: await createHeaders('PUT', 'multipart/form-data'),
     body: formData
   });
   

@@ -4,7 +4,7 @@
 import { generateTimestamp, generateHMAC, generateAuthHeaders, logAuthDetails } from './hmacAuth';
 
 // Test function to verify HMAC generation
-export const testHMACGeneration = () => {
+export const testHMACGeneration = async () => {
   console.log('🧪 Testing HMAC Authentication Generation...');
   console.log('==========================================');
   
@@ -14,19 +14,19 @@ export const testHMACGeneration = () => {
   // Test all HTTP methods
   const methods: Array<'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'> = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
   
-  methods.forEach(method => {
+  for (const method of methods) {
     console.log(`\n🔐 Testing ${method} method:`);
-    logAuthDetails(method);
+    await logAuthDetails(method);
     
-    const headers = generateAuthHeaders(method);
+    const headers = await generateAuthHeaders(method);
     console.log(`   Headers generated:`, headers);
-  });
+  }
   
   console.log('\n✅ HMAC Authentication test completed!');
 };
 
 // Function to compare with DevOps team's JavaScript output
-export const compareWithDevOpsOutput = () => {
+export const compareWithDevOpsOutput = async () => {
   console.log('🔍 Comparing with DevOps team output...');
   
   // This should match the output from the HTML file
@@ -40,13 +40,17 @@ export const compareWithDevOpsOutput = () => {
   console.log(`   HMAC Key: ${key} (may change per environment)`);
   
   const methods = ['GET', 'POST', 'PUT', 'DELETE'];
-  methods.forEach(method => {
+  for (const method of methods) {
     const dataString = `${method}${id}${timestamp}`;
     console.log(`   ${method} Data String: ${dataString}`);
     
-    // You can manually verify this matches the DevOps output
-    console.log(`   ${method} should generate the same hash as in the HTML file`);
-  });
+    try {
+      const hash = await generateHMAC(method, timestamp);
+      console.log(`   ${method} Generated Hash: ${hash}`);
+    } catch (error) {
+      console.log(`   ${method} Error: ${error}`);
+    }
+  }
   
   console.log('\n💡 To verify:');
   console.log('   1. Open the HTML file in browser');
