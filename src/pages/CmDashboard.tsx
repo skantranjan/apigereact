@@ -202,7 +202,7 @@ const CmDashboard: React.FC = () => {
     const fetchMasterData = async () => {
       try {
         console.log('Fetching master data from /get-masterdata endpoint');
-        const result: MasterDataResponse = await apiGet('/get-masterdata');
+        const result: MasterDataResponse = await apiGet('/masterdata');
         console.log('Master Data API Response:', result);
         
         if (result.success && result.data) {
@@ -902,7 +902,7 @@ const CmDashboard: React.FC = () => {
         throw new Error('Conflict: 3PM Code already exists in the system');
       }
 
-      const response = await apiPost('/addpm', {
+      const response = await apiPost('/pm', {
         period: add3PMConfirmData!.period,
         srm_name: add3PMConfirmData!.srm_name,
         srm_email: add3PMConfirmData!.srm_email,

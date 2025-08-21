@@ -82,6 +82,11 @@ export const generateAllHashes = async (): Promise<{
   const id = FIXED_CONFIG.ID;
   const key = config.KEY;
 
+  // Validate that the HMAC key is defined
+  if (!key) {
+    throw new Error('HMAC key is not configured. Please check your environment variables.');
+  }
+
   console.log('🔐 Generating all HMAC hashes...');
   console.log(`   Timestamp: ${timestamp}`);
   console.log(`   ID: ${id}`);
